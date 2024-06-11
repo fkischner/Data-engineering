@@ -1,0 +1,7 @@
+
+requests==2.25.1
+pandas==1.2.3
+psycopg2-binary
+SQLAlchemy==1.4.22
+setuptools
+python-dotenv
