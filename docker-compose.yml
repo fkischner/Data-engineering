@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  etl:
+    build: .
+    container_name: etl_container
+    env_file: .env
+    volumes:
+      - .:/app
+    networks:
+      - etl_network
+
+  airflow:
+    image: puckel/docker-airflow:1.10.9
+    container_name: airflow_container
+    depends_on:
+      - etl
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      - ./create_table.sql:/create_table.sql
+      - ./Modules:/usr/local/airflow/Modules
+    environment:
+      - LOAD_EX=n
+      - EXECUTOR=SequentialExecutor
+    networks:
+      - etl_network
+
+networks:
+  etl_network:
+    driver: bridge
